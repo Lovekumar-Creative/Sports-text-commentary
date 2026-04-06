@@ -5,6 +5,7 @@ The system detects **players and football from a video**, tracks their movement,
 
 The project uses **YOLOv8 for object detection**, tracking algorithms, and rule-based commentary generation.
 
+[![Download ZIP](https://img.shields.io/badge/Download-Project_ZIP-green)](https://drive.google.com/file/d/1j_lEejh3UWy2UKIegBPI3E9Prhoc6NJW/view?usp=sharing)
 ---
 
 # 🚀 Features
