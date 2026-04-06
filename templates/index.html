@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+
+<title>Football Commentary AI</title>
+
+<link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+
+</head>
+
+<body>
+
+<h1>Football Commentary AI</h1>
+
+<div class="container">
+
+<div class="video-box">
+
+<img id="videoStream" src="/video_feed" width="700">
+
+<div class="controls">
+
+<button onclick="start()">Start</button>
+<button onclick="pause()">Pause</button>
+<button onclick="resume()">Resume</button>
+<button onclick="download()">Download Text</button>
+
+</div>
+
+</div>
+
+<div class="subtitle-box">
+
+<h2>Live Commentary</h2>
+
+<div id="commentary"></div>
+
+</div>
+
+</div>
+
+<script>
+
+let lastCount = 0
+
+function typeCommentary(text, box){
+
+    let words = text.split(" ")
+    let index = 0
+
+    let p = document.createElement("p")
+    box.appendChild(p)
+
+    let interval = setInterval(function(){
+
+        if(index < words.length){
+            p.innerHTML += words[index] + " "
+            index++
+        }
+        else{
+            clearInterval(interval)
+        }
+
+        box.scrollTop = box.scrollHeight
+
+    },150)
+
+}
+
+setInterval(function(){
+
+fetch("/commentary")
+.then(response => response.json())
+.then(data => {
+
+let box = document.getElementById("commentary")
+
+if(data.length > lastCount){
+
+    for(let i = lastCount; i < data.length; i++){
+        typeCommentary(data[i], box)
+    }
+
+    lastCount = data.length
+
+    // ALWAYS SCROLL TO LATEST COMMENT
+    setTimeout(function(){
+        box.scrollTop = box.scrollHeight
+    },100)
+}
+
+})
+
+},1000)
+
+function start(){
+fetch("/start")
+}
+
+function pause(){
+fetch("/pause")
+}
+
+function resume(){
+fetch("/resume")
+}
+
+function download(){
+window.location="/download"
+}
+
+</script>
+
+</body>
+
+</html>
